@@ -22,7 +22,7 @@ const PROJECTS = [
     location:"Kallakatta, Kasargod", beneficiaries:"500+ students",
     year:"2019", partner:"", status:"completed",
     description:"We provided a comprehensive range of resources to Kallakatta MAUP School — including a school bus, kitchen equipment, LCD projectors, computers, lab benches and desks, audio-visual equipment, and play items.",
-    impact:"Transformed the school's infrastructure, improving both academic and extracurricular activities for the entire school community.",
+    impact:"Transformed the school infrastructure, improving both academic and extracurricular activities for the entire school community.",
     sort_order:2,
     photos:["https://lh3.googleusercontent.com/pw/AP1GczNbNNkQuPW_uClmOr58WuTMPusrkKAg9SK1Sd0B19RNrpnrZFjiVUkLG7OIzn17tNInZGEo-qgXeaj_GRGn-eL03A4LKbFW2zyVaALBBsn5_V9O784=w800-h560-no"]
   },
@@ -39,7 +39,7 @@ const PROJECTS = [
     id:"p4", title:"Deen Dayal Buds Rehabilitation Center", category:"Special Needs",
     location:"Madhur Grama Panchayat, Kasargod", beneficiaries:"Mentally challenged children",
     year:"2021", partner:"Gram Panchayat, Madhur", status:"completed",
-    description:"We constructed a well-equipped new building for the Deen Dayal Buds Rehabilitation Center for mentally challenged students, replacing a temporary shed with modern amenities including AV equipment, desks, benches and play items.",
+    description:"We constructed a well-equipped new building for the Deen Dayal Buds Rehabilitation Center for mentally challenged students, replacing a temporary shed with modern amenities.",
     impact:"Replaced a temporary shed with a permanent facility with modern amenities for mentally challenged children.",
     sort_order:4,
     photos:["https://lh3.googleusercontent.com/pw/AP1GczPrYT0xateatuiPdkjf0OgEfG_Nizcpd1xRw3z9UwZN6U-gj-BaBAdhv3nLtgHuAJ-kx21Y3xk5O3pr37DWSF4atsZ4Cxstg822xt5lSGf-JryqXMo=w800-h560-no"]
@@ -60,7 +60,7 @@ const PROJECTS = [
     id:"p6", title:"Awareness Program for School Girls", category:"Education",
     location:"Tumkur District", beneficiaries:"School girls across Tumkur",
     year:"2022–Present", partner:"District Judge Jubeda Jumjum", status:"ongoing",
-    description:"In collaboration with District Judge Jubeda Jumjum, we conduct awareness programs for school girls on crimes against women and children. Sessions educate students on recognizing, preventing, and safely handling such situations.",
+    description:"In collaboration with District Judge Jubeda Jumjum, we conduct awareness programs for school girls on crimes against women and children, educating them on recognizing, preventing, and safely handling such situations.",
     impact:"Empowered hundreds of school girls with knowledge and confidence to protect themselves.",
     sort_order:6, photos:[]
   },
@@ -78,7 +78,7 @@ const PROJECTS = [
     location:"Tumkur", beneficiaries:"500+ non-verbal students",
     year:"2022", partner:"Red Cross School", status:"completed",
     description:"We provided digital communication boards to the Red Cross School for non-verbal students in Tumkur, enhancing communication skills and learning for children with speech and language challenges.",
-    impact:"500 students gained improved communication tools and learning opportunities.",
+    impact:"500 students with speech and language challenges gained improved communication tools.",
     sort_order:8, photos:[]
   },
   {
@@ -147,45 +147,48 @@ const PROJECTS = [
     id:"p16", title:"NEET Coaching & Career Guidance", category:"Education",
     location:"Tumkur District", beneficiaries:"Aspiring medical students",
     year:"2020–Present", partner:"", status:"ongoing",
-    description:"We provide NEET coaching and training programs to help underprivileged students pursue professional careers in engineering and medicine. Includes career guidance, mentorship, and competitive exam training.",
+    description:"We provide NEET coaching and training programs to help underprivileged students pursue professional careers in engineering and medicine, including career guidance and mentorship.",
     impact:"Students from economically disadvantaged backgrounds gained access to professional entrance exam coaching.",
     sort_order:16, photos:[]
   }
 ];
 
-(async () => {
-  try {
-    await initDB();
-    console.log("🌱 Seeding database...");
-
-    for (const p of PROJECTS) {
-      // Upsert project
+async function seedAll() {
+  for (const p of PROJECTS) {
+    await pool.query(
+      `INSERT INTO projects (id,title,category,location,beneficiaries,year,partner,status,description,impact,sort_order)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+       ON CONFLICT (id) DO UPDATE SET
+         title=$2,category=$3,location=$4,beneficiaries=$5,year=$6,
+         partner=$7,status=$8,description=$9,impact=$10,sort_order=$11,updated_at=NOW()`,
+      [p.id,p.title,p.category,p.location,p.beneficiaries,p.year,
+       p.partner,p.status,p.description,p.impact,p.sort_order]
+    );
+    await pool.query("DELETE FROM photos WHERE project_id=$1", [p.id]);
+    for (let i = 0; i < p.photos.length; i++) {
       await pool.query(
-        `INSERT INTO projects (id,title,category,location,beneficiaries,year,partner,status,description,impact,sort_order)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
-         ON CONFLICT (id) DO UPDATE SET
-           title=$2,category=$3,location=$4,beneficiaries=$5,year=$6,
-           partner=$7,status=$8,description=$9,impact=$10,sort_order=$11,updated_at=NOW()`,
-        [p.id,p.title,p.category,p.location,p.beneficiaries,p.year,
-         p.partner,p.status,p.description,p.impact,p.sort_order]
+        "INSERT INTO photos (project_id, url, sort_order) VALUES ($1,$2,$3)",
+        [p.id, p.photos[i], i]
       );
-
-      // Clear existing photos and re-insert
-      await pool.query("DELETE FROM photos WHERE project_id=$1", [p.id]);
-      for (let i = 0; i < p.photos.length; i++) {
-        await pool.query(
-          "INSERT INTO photos (project_id, url, sort_order) VALUES ($1,$2,$3)",
-          [p.id, p.photos[i], i]
-        );
-      }
-
-      console.log(`  ✅ ${p.title} (${p.photos.length} photos)`);
     }
-
-    console.log("\n✨ Seed complete!");
-    process.exit(0);
-  } catch (err) {
-    console.error("❌ Seed failed:", err.message);
-    process.exit(1);
+    console.log(`  ✅ ${p.title}`);
   }
-})();
+}
+
+/* Allow running directly: node server/seed.js */
+if (require.main === module) {
+  (async () => {
+    try {
+      await initDB();
+      console.log("🌱 Seeding database…");
+      await seedAll();
+      console.log("✨ Seed complete!");
+      process.exit(0);
+    } catch (err) {
+      console.error("❌ Seed failed:", err.message);
+      process.exit(1);
+    }
+  })();
+}
+
+module.exports = { seedAll };

@@ -574,23 +574,23 @@ footer{
     </div>
     <div class="hero-stats reveal delay-4">
       <div class="h-stat">
-        <div class="h-stat-num"><span class="counter" data-target="28">0</span><span>+</span></div>
+        <div class="h-stat-num"><span id="stat-projects" class="counter" data-target="28">0</span><span>+</span></div>
         <div class="h-stat-label">Projects Completed</div>
       </div>
       <div class="h-stat" style="padding-left:24px">
-        <div class="h-stat-num"><span class="counter" data-target="10000">0</span><span>+</span></div>
+        <div class="h-stat-num"><span id="stat-students" class="counter" data-target="10000">0</span><span>+</span></div>
         <div class="h-stat-label">Students Supported</div>
       </div>
       <div class="h-stat" style="padding-left:24px">
-        <div class="h-stat-num"><span class="counter" data-target="700">0</span><span>+</span></div>
+        <div class="h-stat-num"><span id="stat-disability" class="counter" data-target="700">0</span><span>+</span></div>
         <div class="h-stat-label">Students with Disability</div>
       </div>
       <div class="h-stat" style="padding-left:24px">
-        <div class="h-stat-num"><span class="counter" data-target="1500">0</span><span>+</span></div>
+        <div class="h-stat-num"><span id="stat-women" class="counter" data-target="1500">0</span><span>+</span></div>
         <div class="h-stat-label">Women Benefited</div>
       </div>
       <div class="h-stat" style="padding-left:24px">
-        <div class="h-stat-num"><span class="counter" data-target="12000">0</span><span>+</span></div>
+        <div class="h-stat-num"><span id="stat-lives" class="counter" data-target="12000">0</span><span>+</span></div>
         <div class="h-stat-label">Lives Impacted</div>
       </div>
     </div>
@@ -635,12 +635,12 @@ footer{
         <div class="mv-card-inner">
           <div class="mv-icon">🎯</div>
           <div class="mv-head">Our Mission</div>
-          <p class="mv-body">
+          <p class="mv-body mission-body">
             Our mission at Shuddhi Educational Charitable Trust is to create inclusive and sustainable
             opportunities for underprivileged and deserving individuals through quality education,
             infrastructure development, and welfare initiatives.
           </p>
-          <p class="mv-body" style="margin-top:16px">
+          <p class="mv-body mission-body" style="margin-top:16px">
             We are committed to empowering youth, supporting women's independence, and enabling
             children — including those with special needs — to access meaningful learning and growth.
             Through modern classrooms, hostels, audio-visual programs, scholarships, and NEET coaching,
@@ -658,7 +658,7 @@ footer{
             to all, regardless of social or economic background.
           </p>
           <p class="mv-body" style="margin-top:16px">
-            Shuddhi Educational Charitable Trust envisions a future where underprivileged children,
+            <span id="vision-body">Shuddhi Educational Charitable Trust envisions a future where underprivileged children,
             youth, and women can achieve their full potential through quality education, skill development,
             and supportive infrastructure. We aspire to create inclusive communities where every individual
             is equipped to lead a dignified, productive, and empowered life.
@@ -739,23 +739,23 @@ footer{
   <div style="max-width:1100px;margin:0 auto">
     <div class="impact-grid">
       <div class="impact-item reveal">
-        <div class="impact-num"><span class="counter" data-target="28">0</span><span class="plus">+</span></div>
+        <div class="impact-num"><span id="stat-projects" class="counter" data-target="28">0</span><span class="plus">+</span></div>
         <div class="impact-label">Projects<br/>Completed</div>
       </div>
       <div class="impact-item reveal delay-1">
-        <div class="impact-num"><span class="counter" data-target="10000">0</span><span class="plus">+</span></div>
+        <div class="impact-num"><span id="stat-students" class="counter" data-target="10000">0</span><span class="plus">+</span></div>
         <div class="impact-label">Students<br/>Supported</div>
       </div>
       <div class="impact-item reveal delay-2">
-        <div class="impact-num"><span class="counter" data-target="700">0</span><span class="plus">+</span></div>
+        <div class="impact-num"><span id="stat-disability" class="counter" data-target="700">0</span><span class="plus">+</span></div>
         <div class="impact-label">Students with<br/>Disability</div>
       </div>
       <div class="impact-item reveal delay-3">
-        <div class="impact-num"><span class="counter" data-target="1500">0</span><span class="plus">+</span></div>
+        <div class="impact-num"><span id="stat-women" class="counter" data-target="1500">0</span><span class="plus">+</span></div>
         <div class="impact-label">Women<br/>Benefited</div>
       </div>
       <div class="impact-item reveal delay-4">
-        <div class="impact-num"><span class="counter" data-target="12000">0</span><span class="plus">+</span></div>
+        <div class="impact-num"><span id="stat-lives" class="counter" data-target="12000">0</span><span class="plus">+</span></div>
         <div class="impact-label">Lives<br/>Impacted</div>
       </div>
     </div>
@@ -954,7 +954,7 @@ footer{
             <li><span>✦</span> Full alignment with CSR regulations and documentation support</li>
             <li><span>✦</span> End-to-end project execution and impact reporting</li>
           </ul>
-          <a href="mailto:info@shuddhitrust.org" class="btn-partner">🤝 Partner With Us</a>
+          <a href="mailto:info@shuddhitrust.org" class="contact-email" class="btn-partner">🤝 Partner With Us</a>
         </div>
       </div>
     </div>
@@ -1020,8 +1020,8 @@ footer{
         <div class="test-author">
           <div class="test-avatar">🏛️</div>
           <div>
-            <div class="test-name">K. Gopal Krishna</div>
-            <div class="test-role">President, Gram Panchayat, Madhur</div>
+            <div class="test-name" id="test-name-1">K. Gopal Krishna</div>
+            <div class="test-role" id="test-role-1">President, Gram Panchayat, Madhur</div>
           </div>
         </div>
       </div>
@@ -1033,8 +1033,8 @@ footer{
         <div class="test-author">
           <div class="test-avatar">👩</div>
           <div>
-            <div class="test-name">Radhamma</div>
-            <div class="test-role">Tailoring Training Beneficiary</div>
+            <div class="test-name" id="test-name-2">Radhamma</div>
+            <div class="test-role" id="test-role-2">Tailoring Training Beneficiary</div>
           </div>
         </div>
       </div>
@@ -1046,8 +1046,8 @@ footer{
         <div class="test-author">
           <div class="test-avatar">🏫</div>
           <div>
-            <div class="test-name">Jayalakshmi C H</div>
-            <div class="test-role">Kallakatta MAUP School, Kasargod</div>
+            <div class="test-name" id="test-name-3">Jayalakshmi C H</div>
+            <div class="test-role" id="test-role-3">Kallakatta MAUP School, Kasargod</div>
           </div>
         </div>
       </div>
@@ -1059,8 +1059,8 @@ footer{
         <div class="test-author">
           <div class="test-avatar">🎓</div>
           <div>
-            <div class="test-name">Ravi</div>
-            <div class="test-role">Scholarship Recipient</div>
+            <div class="test-name" id="test-name-4">Ravi</div>
+            <div class="test-role" id="test-role-4">Scholarship Recipient</div>
           </div>
         </div>
       </div>
@@ -1097,7 +1097,7 @@ footer{
         </div>
       </div>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap" class="reveal delay-4">
-        <a href="mailto:info@shuddhitrust.org" class="btn-primary" style="font-size:16px;padding:18px 44px">❤️ Donate Now</a>
+        <a href="mailto:info@shuddhitrust.org" class="contact-email" class="btn-primary" style="font-size:16px;padding:18px 44px">❤️ Donate Now</a>
         <a href="#csr" class="btn-view-all" style="font-size:14px;padding:16px 32px;border-color:var(--green)">🤝 CSR Partnership</a>
       </div>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:48px" class="reveal delay-5">
@@ -1153,7 +1153,7 @@ footer{
       <ul>
         <li><a href="#donate">Donate (80G)</a></li>
         <li><a href="#csr">CSR Partner</a></li>
-        <li><a href="mailto:info@shuddhitrust.org">Volunteer</a></li>
+        <li><a href="mailto:info@shuddhitrust.org" class="contact-email">Volunteer</a></li>
         <li><a href="#donate">Sponsor a Child</a></li>
         <li><a href="/projects">All Projects</a></li>
       </ul>
@@ -1161,10 +1161,10 @@ footer{
     <div class="footer-col">
       <h4>Contact</h4>
       <ul>
-        <li><span>📍 Tumkur, Karnataka, India</span></li>
-        <li><a href="mailto:info@shuddhitrust.org">info@shuddhitrust.org</a></li>
-        <li><a href="tel:+91XXXXXXXXXX">+91 — — — — — — — —</a></li>
-        <li><a href="https://shuddhitrust.org">shuddhitrust.org</a></li>
+        <li><span>📍 <span id="contact-address">Tumkur, Karnataka, India</span></span></li>
+        <li><a href="mailto:info@shuddhitrust.org" class="contact-email">info@shuddhitrust.org</a></li>
+        <li><a href="tel:+91XXXXXXXXXX"><a href="tel:" class="contact-phone">+91 — — — — — — — —</a></a></li>
+        <li><a href="https://shuddhitrust.org" id="contact-website">shuddhitrust.org</a></li>
       </ul>
     </div>
   </div>
@@ -1247,3 +1247,68 @@ document.querySelectorAll('.nav-links a').forEach(a => {
 </script>
 </body>
 </html>
+<script>
+/* ── Fetch live content from API and hydrate the page ── */
+(async () => {
+  try {
+    const res  = await fetch('/api/content');
+    const c    = await res.json();
+
+    const set  = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+    const html = (id, val) => { const el = document.getElementById(id); if (el && val) el.innerHTML = val.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>'); };
+
+    /* Stats — hero */
+    set('stat-projects',   c['stat.projects']   || '28+');
+    set('stat-students',   c['stat.students']   || '10,000+');
+    set('stat-disability', c['stat.disability'] || '700+');
+    set('stat-women',      c['stat.women']      || '1,500+');
+    set('stat-lives',      c['stat.lives']      || '12,000+');
+    /* Stats — impact band */
+    set('band-projects',   c['stat.projects']   || '28+');
+    set('band-students',   c['stat.students']   || '10,000+');
+    set('band-disability', c['stat.disability'] || '700+');
+    set('band-women',      c['stat.women']      || '1,500+');
+    set('band-lives',      c['stat.lives']      || '12,000+');
+
+    /* Hero */
+    set('hero-title',       c['hero.title']);
+    set('hero-subtitle',    c['hero.subtitle']);
+    set('hero-description', c['hero.description']);
+
+    /* Mission */
+    const mp = document.querySelectorAll('.mission-body');
+    if (c['mission.body'] && mp.length) {
+      const parts = c['mission.body'].split('\n\n');
+      mp.forEach((el, i) => { if (parts[i]) el.textContent = parts[i]; });
+    }
+
+    /* Vision */
+    set('vision-body', c['vision.body']);
+
+    /* About */
+    set('about-p1', c['about.para1']);
+    set('about-p2', c['about.para2']);
+    set('about-p3', c['about.para3']);
+
+    /* Testimonials */
+    [1,2,3,4].forEach(n => {
+      set(`test-name-${n}`, c[`testimonial.${n}.name`]);
+      set(`test-role-${n}`, c[`testimonial.${n}.role`]);
+      set(`test-body-${n}`, c[`testimonial.${n}.body`]);
+    });
+
+    /* Contact */
+    document.querySelectorAll('.contact-email').forEach(el => {
+      if (c['contact.email']) { el.textContent = c['contact.email']; el.href = 'mailto:' + c['contact.email']; }
+    });
+    document.querySelectorAll('.contact-phone').forEach(el => {
+      if (c['contact.phone']) { el.textContent = c['contact.phone']; el.href = 'tel:' + c['contact.phone'].replace(/\s/g,''); }
+    });
+    set('contact-address', c['contact.address']);
+    set('contact-website', c['contact.website']);
+
+  } catch(e) {
+    console.warn('Could not load dynamic content, using defaults.', e);
+  }
+})();
+</script>

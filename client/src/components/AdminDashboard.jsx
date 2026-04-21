@@ -1,6 +1,9 @@
 import { useState } from "react";
 import ProjectEditorModal from "./ProjectEditorModal.jsx";
+import ContentEditor      from "./ContentEditor.jsx";
 import { createProject, updateProject, deleteProject } from "../api.js";
+
+function getToken() { return localStorage.getItem("shuddhi_token"); }
 
 const CAT_COLORS = {
   "Education":         "#2E7D32",
@@ -28,8 +31,9 @@ function Toast({ msg }) {
 }
 
 export default function AdminDashboard({ projects, onProjectsChange, onLogout, onViewPublic }) {
-  const [editing,  setEditing]  = useState(null);   // null | {} | project
-  const [confirm,  setConfirm]  = useState(null);   // project id to delete
+  const [activeTab, setActiveTab] = useState("projects"); // "projects" | "homepage"
+  const [editing,  setEditing]  = useState(null);
+  const [confirm,  setConfirm]  = useState(null);
   const [search,   setSearch]   = useState("");
   const [catFilter,setCatFilter]= useState("All");
   const [toast,    setToast]    = useState("");
@@ -110,7 +114,33 @@ export default function AdminDashboard({ projects, onProjectsChange, onLogout, o
         </div>
       </div>
 
-      <div style={{ padding:"28px 24px 60px", maxWidth:1200, margin:"0 auto" }}>
+      {/* Tab bar */}
+      <div style={{
+        background:"#0a1a0a", borderBottom:"1px solid #1e3a1e",
+        padding:"0 24px", display:"flex", gap:4,
+      }}>
+        {[
+          { id:"projects", label:"📁 Projects" },
+          { id:"homepage", label:"🏠 Homepage Content" },
+        ].map(tab => (
+          <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+            padding:"14px 22px", background:"none", border:"none", cursor:"pointer",
+            fontSize:13, fontWeight:600, fontFamily:"inherit",
+            color:      activeTab===tab.id ? "#A5D6A7"     : "#4a7a4a",
+            borderBottom: activeTab===tab.id ? "2px solid #4CAF50" : "2px solid transparent",
+          }}>{tab.label}</button>
+        ))}
+      </div>
+
+      <div style={{ padding:"28px 24px 60px", maxWidth: activeTab==="homepage"?860:1200, margin:"0 auto" }}>
+
+        {/* ── HOMEPAGE CONTENT EDITOR ── */}
+        {activeTab === "homepage" && (
+          <ContentEditor token={getToken()} />
+        )}
+
+        {/* ── PROJECTS TAB ── */}
+        {activeTab === "projects" && (<>
 
         {/* Stats */}
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))", gap:12, marginBottom:28 }}>
@@ -245,6 +275,8 @@ export default function AdminDashboard({ projects, onProjectsChange, onLogout, o
           {filtered.length} of {projects.length} projects shown
           {totalPhotos > 0 && ` · ${totalPhotos} total photos in database`}
         </p>
+
+        </>)} {/* end projects tab */}
       </div>
 
       {/* Edit / Create modal */}

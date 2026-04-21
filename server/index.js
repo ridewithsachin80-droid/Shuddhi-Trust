@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 /* ── API Routes ── */
 app.use("/api/auth",     require("./routes/auth"));
 app.use("/api/projects", require("./routes/projects"));
+app.use("/api/content",  require("./routes/content"));
 app.get("/api/health", (_req, res) => res.json({ status: "ok", time: new Date().toISOString() }));
 
 /* ── Static files ── */

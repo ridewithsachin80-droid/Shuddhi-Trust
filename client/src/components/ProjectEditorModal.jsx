@@ -1,5 +1,29 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { addPhoto, deletePhoto } from "../api.js";
+
+/* Compress + convert an image File to a base64 data-URL (max 800px wide, ~200KB) */
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const MAX_W = 800, MAX_H = 600, QUALITY = 0.82;
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let { width: w, height: h } = img;
+        if (w > MAX_W) { h = Math.round(h * MAX_W / w); w = MAX_W; }
+        if (h > MAX_H) { w = Math.round(w * MAX_H / h); h = MAX_H; }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", QUALITY));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 const CATEGORIES = ["Education","Infrastructure","Special Needs","Women Empowerment","Health & Welfare","Community Welfare"];
 
@@ -36,6 +60,7 @@ export default function ProjectEditorModal({ project, onSave, onClose }) {
   const [photoErr,   setPhotoErr]   = useState("");
   const [saving,     setSaving]     = useState(false);
   const [addingPhoto,setAddingPhoto]= useState(false);
+  const fileInputRef = useRef(null);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -58,7 +83,26 @@ export default function ProjectEditorModal({ project, onSave, onClose }) {
     finally { setAddingPhoto(false); }
   };
 
-  /* Delete photo — calls API immediately if project already exists */
+  /* Upload photo from device — compress and store as data URL */
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { setPhotoErr("Please select an image file"); return; }
+    setPhotoErr(""); setAddingPhoto(true);
+    try {
+      const dataUrl = await compressImage(file);
+      const caption = newCaption.trim() || file.name.replace(/\.[^.]+$/, "");
+      if (!isNew) {
+        const ph = await addPhoto(project.id, { url: dataUrl, caption });
+        setForm(f => ({ ...f, photos: [...f.photos, ph] }));
+      } else {
+        setForm(f => ({ ...f, photos: [...f.photos, { url: dataUrl, caption, _local: true }] }));
+      }
+      setNewCaption("");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (err) { setPhotoErr("Upload failed: " + err.message); }
+    finally { setAddingPhoto(false); }
+  };
   const handleDeletePhoto = async (ph, i) => {
     try {
       if (!isNew && ph.id) await deletePhoto(project.id, ph.id);
@@ -172,12 +216,34 @@ export default function ProjectEditorModal({ project, onSave, onClose }) {
 
             {/* Add photo row */}
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
+              {/* File upload row */}
+              <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  disabled={addingPhoto}
+                  style={{ display:"none" }}
+                  id="photo-file-input"
+                />
+                <label htmlFor="photo-file-input" style={{
+                  padding:"10px 18px", borderRadius:8,
+                  background: addingPhoto ? "#aaa" : "#1565C0",
+                  color:"#fff", cursor: addingPhoto ? "not-allowed" : "pointer",
+                  fontWeight:600, fontSize:13, whiteSpace:"nowrap",
+                  pointerEvents: addingPhoto ? "none" : "auto"
+                }}>📁 Upload from device</label>
+                <span style={{ color:"#888", fontSize:12 }}>— or paste a public image URL below —</span>
+              </div>
+
+              {/* URL row */}
               <div style={{ display:"flex", gap:8 }}>
                 <input style={{ ...input, flex:1 }}
                   value={newUrl}
                   onChange={e=>{ setNewUrl(e.target.value); setPhotoErr(""); }}
                   onKeyDown={e=>e.key==="Enter"&&handleAddPhoto()}
-                  placeholder="Paste direct image URL (Google Photos, etc.)" />
+                  placeholder="Paste direct image URL (Imgur, etc.)" />
                 <button onClick={handleAddPhoto} disabled={addingPhoto} style={{
                   padding:"10px 18px", borderRadius:8, background: addingPhoto?"#81c784":"#2E7D32",
                   color:"#fff", border:"none", cursor:"pointer", fontWeight:600, whiteSpace:"nowrap", fontSize:13
@@ -191,7 +257,9 @@ export default function ProjectEditorModal({ project, onSave, onClose }) {
             {photoErr && <p style={{ color:"#d32f2f", fontSize:12, marginBottom:10 }}>{photoErr}</p>}
 
             <p style={{ fontSize:11, color:"#aaa", marginBottom:14, lineHeight:1.6 }}>
-              💡 <strong>Google Photos:</strong> Open photo → Right-click the image → "Copy image address" → paste above. Append <code>=w800-h560-no</code> to the URL for best quality.
+              💡 <strong>Tip:</strong> Use <strong>"📁 Upload from device"</strong> to directly upload photos from your computer or phone — no URL needed. Photos are compressed automatically.<br/>
+              For URL: use <a href="https://imgur.com" target="_blank" rel="noreferrer" style={{ color:"#2E7D32" }}>Imgur.com</a> (free) — upload there, right-click the image → "Copy image address", paste above.<br/>
+              <span style={{ color:"#d32f2f" }}>⚠️ Google Photos links do <u>not</u> work — Google blocks direct image sharing.</span>
             </p>
 
             {/* Thumbnails */}
